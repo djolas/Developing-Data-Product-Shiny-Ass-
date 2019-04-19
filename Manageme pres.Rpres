@@ -1,0 +1,80 @@
+Manageme presentation
+========================================================
+author: olagunju Ayodeji
+date: 19/04/2019
+autosize: true
+
+What the app does
+========================================================
+- The manageme app calculates the total income 
+- The manageme app calculates the total expenses
+- The manageme app calculate the savings made monthly
+
+Code to build the app
+========================================================
+
+```{r, echo=FALSE}
+library(shiny)
+shinyUI(pageWithSidebar(
+  headerPanel("Manage Me"),
+  sidebarPanel(
+    h4('Income'),
+    textInput('text', 'Name', value=''),
+    numericInput('Wages', 'Wages ($)', 50000),
+    numericInput('ExtraIncome', 'Monthly Extra Income ($)', 5000),
+    h5('Expenses'),
+    numericInput('Transportation', 'Transport ($ per Month)', 503),
+    numericInput('Feeding', 'Feeding ($ per Month)', 1050),
+    numericInput('Utilities', 'Utilities ($ per month)', 163),
+    numericInput('Shopping', 'Shopping ($ per month)', 180),
+    numericInput('Others', 'Others ($ per month)', 200)
+  ),
+  mainPanel(
+    h4('Total Monthly Income ($)'),
+    textOutput("TotalMonthlyIncome"),
+    h4('Total Monthly Expenses ($)'),
+    textOutput("TotalMonthlyExpenses"),
+    h4('Savings Monthly ($)'),
+    textOutput("SavingsMonthly"),
+    br(),
+    h4('Instructions'),
+    helpText("This application is to help you manage your income and expenses."),
+    code("Savings Monthly")
+      )
+))
+```
+
+code to build the app
+========================================================
+
+```{r, echo=TRUE}
+library(shiny)
+shinyServer(
+  function(input, output){
+    output$TotalMonthlyIncome <- renderText({ calculateTotalMonthlyIncome(input$Wages, input$ExtraIncome) })
+    output$TotalMonthlyExpenses <- renderText({calculateTotalMonthlyExpenses(input$Transportation, input$Feeding, input$Utilities, input$Shopping, input$Others)})
+    output$SavingsMonthly <- renderText({calculateSavingsMonthly(input$Wages, input$ExtraIncome,input$Transportation, input$Feeding, input$Utilities, input$Shopping, input$Others)})
+  }
+)
+
+calculateTotalMonthlyIncome <- function (Wages, ExtraIncome) 
+{
+  result <- Wages + ExtraIncome
+  return(round(result, digits = 2))
+}
+
+calculateTotalMonthlyExpenses <- function(Transportation, Feeding, Utilities, Shopping, Others)
+{
+  result <- Transportation + Feeding + Utilities + Shopping + Others
+  return(round(result, digits = 2))
+}
+
+calculateSavingsMonthly <- function(Wages, ExtraIncome,Transportation, Feeding, Utilities, Shopping, Others )
+{
+  result <- ( (Wages + ExtraIncome) - (Transportation + Feeding + Utilities + Shopping + Others))
+  return(round(result, digits = 2))
+}
+```
+To gain access to the application
+========================================================
+# click this link https://djolas007.shinyapps.io/Manageme/
